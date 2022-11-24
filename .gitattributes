@@ -1,2 +1,2 @@
 data/listings.csv.zip filter=lfs diff=lfs merge=lfs -text
-data/test.csv.zip filter=lfs diff=lfs merge=lfs -text
+data/reviews.csv.zip filter=lfs diff=lfs merge=lfs -text
