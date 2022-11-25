@@ -1,0 +1,343 @@
+@prefix : <http://www.dei.unipd.it/database2/airbnbOntology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.dei.unipd.it/database2/airbnbOntology> .
+
+<http://www.dei.unipd.it/database2/airbnbOntology> rdf:type owl:Ontology ;
+                                                   
+                                                   rdfs:comment "An ontology for the airbnb data of NYC in September 2022 which includes data about hosts, flats, and reviews."^^xsd:string ;
+                                                   
+                                                   rdfs:isDefinedBy "Group ASM"^^xsd:string .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#belongsTo
+
+:belongsTo rdf:type owl:FunctionalProperty ,
+                    owl:ObjectProperty ;
+           
+           rdfs:range :Host ;
+           
+           rdfs:domain :Listing ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :belongsTo ;
+                         owl:onClass :Host ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                       ] ;
+           
+           rdfs:range [ rdf:type owl:Restriction ;
+                        owl:onProperty :belongsTo ;
+                        owl:someValuesFrom :Listing
+                      ] .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#hasType
+
+:hasType rdf:type owl:FunctionalProperty ,
+                  owl:ObjectProperty ;
+         
+         rdfs:domain :Listing ;
+         
+         rdfs:range :ListingType ,
+                    [ rdf:type owl:Restriction ;
+                      owl:onProperty :hasType ;
+                      owl:someValuesFrom :Listing
+                    ] ;
+         
+         rdfs:domain [ rdf:type owl:Restriction ;
+                       owl:onProperty :hasType ;
+                       owl:onClass :ListingType ;
+                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                     ] .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#locatedIn
+
+:locatedIn rdf:type owl:FunctionalProperty ,
+                    owl:ObjectProperty ;
+           
+           rdfs:range :Area ;
+           
+           rdfs:domain :Listing ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :locatedIn ;
+                         owl:onClass :Area ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                       ] ;
+           
+           rdfs:range [ rdf:type owl:Restriction ;
+                        owl:onProperty :locatedIn ;
+                        owl:someValuesFrom :Listing
+                      ] .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#referredTo
+
+:referredTo rdf:type owl:FunctionalProperty ,
+                     owl:ObjectProperty ;
+            
+            rdfs:range :Listing ;
+            
+            rdfs:domain :Review ;
+            
+            rdfs:range [ rdf:type owl:Restriction ;
+                         owl:onProperty :referredTo ;
+                         owl:someValuesFrom :Review
+                       ] ;
+            
+            rdfs:domain [ rdf:type owl:Restriction ;
+                          owl:onProperty :referredTo ;
+                          owl:onClass :Listing ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                        ] .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#writtenBy
+
+:writtenBy rdf:type owl:FunctionalProperty ,
+                    owl:ObjectProperty ;
+           
+           rdfs:range :Guest ;
+           
+           rdfs:domain :Review ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :writtenBy ;
+                         owl:onClass :Guest ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                       ] ;
+           
+           rdfs:range [ rdf:type owl:Restriction ;
+                        owl:onProperty :writtenBy ;
+                        owl:someValuesFrom :Review
+                      ] .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#areaName
+
+:areaName rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          
+          rdfs:domain :Area ;
+          
+          rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#availability365
+
+:availability365 rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 
+                 rdfs:domain :Listing ;
+                 
+                 rdfs:range xsd:int .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#boroughName
+
+:boroughName rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             
+             rdfs:domain :Borough ;
+             
+             rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#date
+
+:date rdf:type owl:DatatypeProperty ,
+               owl:FunctionalProperty ;
+      
+      rdfs:domain :Review ;
+      
+      rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#hostSince
+
+:hostSince rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           
+           rdfs:domain :Host ;
+           
+           rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#listingTypeName
+
+:listingTypeName rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 
+                 rdfs:domain :ListingType ;
+                 
+                 rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#listingsCount
+
+:listingsCount rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               
+               rdfs:domain :Host ;
+               
+               rdfs:range xsd:int .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#minNumNights
+
+:minNumNights rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              
+              rdfs:domain :Listing ;
+              
+              rdfs:range xsd:int .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#numReviews
+
+:numReviews rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            
+            rdfs:domain :Listing ;
+            
+            rdfs:range xsd:int .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#personName
+
+:personName rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+            
+            rdfs:domain :Person ;
+            
+            rdfs:range xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#price
+
+:price rdf:type owl:DatatypeProperty ,
+                owl:FunctionalProperty ;
+       
+       rdfs:domain :Listing ;
+       
+       rdfs:range xsd:float .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#reviewRating
+
+:reviewRating rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              
+              rdfs:domain :Listing ;
+              
+              rdfs:range xsd:float .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Area
+
+:Area rdf:type owl:Class ;
+      
+      rdfs:subClassOf :Borough ;
+      
+      rdfs:comment "A neighbourhood in a borough"^^xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Borough
+
+:Borough rdf:type owl:Class ;
+         
+         rdfs:comment "NYC has five of them—the Bronx, Brooklyn, Manhattan, Queens and Staten Island—each with dozens of neighborhoods lending their own local flavor"^^xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Guest
+
+:Guest rdf:type owl:Class ;
+       
+       rdfs:subClassOf :Person .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Host
+
+:Host rdf:type owl:Class ;
+      
+      rdfs:subClassOf :Person .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Listing
+
+:Listing rdf:type owl:Class ;
+         
+         rdfs:comment "Any available flat/room/apartment available for rent on airbnb "^^xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#ListingType
+
+:ListingType rdf:type owl:Class ;
+             
+             rdfs:comment "Type of a listing on airbnb i.e. a listing could be a single room, a shared room, a hotel room or an entire apartment"^^xsd:string .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Person
+
+:Person rdf:type owl:Class .
+
+
+
+###  http://www.dei.unipd.it/database2/airbnbOntology#Review
+
+:Review rdf:type owl:Class .
+
+
+
+
+###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
+

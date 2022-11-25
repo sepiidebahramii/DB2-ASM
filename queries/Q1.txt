@@ -1,0 +1,29 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Which listing type is the most repeated one in all boroughs?
+select ?borough_name ?listing_type_name (COUNT (?Listing) as ?listing_count) where
+{
+    ?Listing ao:hasType ?listingType.
+    ?listingType ao:listingTypeName ?listing_type_name.
+    ?Listing ao:locatedIn ?Area.
+    ?Area rdfs:subClassOf ?Borough.
+    ?Borough ao:boroughName ?borough_name.
+    {
+        select ?Borough (MAX(?count) as ?max_count) where
+        {
+            select ?Borough ?listingType (COUNT (*) as ?count) where
+            {
+                ?Listing ao:hasType ?listingType.
+                ?Listing ao:locatedIn ?Area.
+                ?Area rdfs:subClassOf ?Borough.
+            }
+            GROUP BY ?Borough ?listingType
+        }
+        GROUP BY ?Borough
+    }
+}
+GROUP BY ?borough_name ?listing_type_name ?max_count
+HAVING (?listing_count = ?max_count)

@@ -1,0 +1,30 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Find the hosts with most reviews and the one with least
+select ?Host ?review_count where 
+{
+    {
+        select ?Host (count(?Review) as ?review_count) where 
+        { 
+            ?Review ao:referredTo ?Listing.
+            ?Listing ao:belongsTo ?Host.
+        } 
+        GROUP BY ?Listing ?Host
+        ORDER BY DESC(?review_count) 
+        LIMIT 1
+    }
+    UNION
+    {
+        select ?Host (count(?Review) as ?review_count) where 
+        { 
+            ?Review ao:referredTo ?Listing.
+            ?Listing ao:belongsTo ?Host.
+        } 
+        GROUP BY ?Listing ?Host
+        ORDER BY ASC(?review_count) 
+        LIMIT 1
+    }
+}

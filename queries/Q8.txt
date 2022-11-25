@@ -1,0 +1,28 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Find the host with the most listings for each borough
+select ?borough_name ?Host (count(?Listing) as ?listing_count) where 
+{
+    ?Listing ao:belongsTo ?Host.
+    ?Listing ao:locatedIn ?Area.
+    ?Area rdfs:subClassOf ?Borough.
+    ?Borough ao:boroughName ?borough_name.
+    {
+        select ?Borough (max(?count) as ?max_count) where
+        {
+            select ?Host ?Borough (count(?Listing) as ?count) where 
+            { 
+                ?Listing ao:belongsTo ?Host.
+                ?Listing ao:locatedIn ?Area.
+                ?Area rdfs:subClassOf ?Borough.
+            } 
+            GROUP BY ?Host ?Borough
+        } 
+        GROUP BY ?Borough
+    }
+} 
+GROUP BY ?borough_name ?Host ?max_count
+HAVING (?listing_count = ?max_count)

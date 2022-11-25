@@ -1,0 +1,36 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Do entire home/apt have more availability than private room in a year?
+ASK where
+{
+    {
+        select ?listingType (SUM(?availability_per_listing) as ?sum_available_days_private) where
+        {
+            select ?Listing ?listingType ?availability_per_listing where
+            {
+                ?Listing ao:hasType ?listingType.
+                ?listingType ao:listingTypeName "Private room"^^xsd:string.
+                ?Listing ao:availability365 ?availability.
+                BIND ("365"^^xsd:int - ?availability AS ?availability_per_listing)
+            }
+        }
+        GROUP BY ?listingType
+    }
+    {
+        select ?listingType (SUM(?availability_per_listing) as ?sum_available_days_entire) where
+        {
+            select ?Listing ?listingType ?availability_per_listing where
+            {
+                ?Listing ao:hasType ?listingType.
+                ?listingType ao:listingTypeName "Entire home/apt"^^xsd:string.
+                ?Listing ao:availability365 ?availability.
+                BIND ("365"^^xsd:int - ?availability AS ?availability_per_listing)
+            }
+        }
+        GROUP BY ?listingType
+    }
+    FILTER (?sum_available_days_entire > ?sum_available_days_private)
+}

@@ -1,0 +1,15 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Mean review score for each area
+select ?borough_name (count(?review_rating) as ?count) (sum(?review_rating)/?count as ?review_mean) where 
+{ 
+    ?Listing ao:reviewRating ?review_rating.
+	?Listing ao:locatedIn ?Area.
+    ?Area rdfs:subClassOf ?Borough.
+    ?Borough ao:boroughName ?borough_name.
+} 
+GROUP BY ?Borough ?borough_name 
+ORDER BY DESC (?review_mean)

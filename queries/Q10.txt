@@ -1,0 +1,21 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# Which area in Manhattan has the maximum average price of private room?
+select ?area_name (AVG (?price) as ?max_average_price) where 
+{ 
+    ?Listing ao:price ?price.
+
+    ?Listing ao:hasType ?listingType.
+    ?listingType ao:listingTypeName "Private room"^^xsd:string.
+
+    ?Listing ao:locatedIn ?Area.
+    ?Area ao:areaName ?area_name.
+    ?Area rdfs:subClassOf ?Borough.
+    ?Borough ao:boroughName "Manhattan"^^xsd:string.
+}
+GROUP BY (?area_name)	
+ORDER BY DESC(?max_average_price)
+LIMIT 1

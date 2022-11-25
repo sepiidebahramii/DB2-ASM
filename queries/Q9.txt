@@ -1,0 +1,26 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix ao: <http://www.dei.unipd.it/database2/airbnbOntology#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# What is the percentage of each listing type in a borough?
+select ?listingType ?inner_borough_name (count(?Listing)/?total as ?percentage) where 
+{ 
+    ?Listing ao:hasType ?listingType.
+    ?Listing ao:locatedIn ?Area.
+    ?Area rdfs:subClassOf ?Borough.
+    ?Borough ao:boroughName ?borough_name.
+    {
+        select ?inner_borough_name (count(?Listing) as ?total) where 
+        {
+            ?Listing rdf:type ao:Listing.
+            ?Listing ao:locatedIn ?Area.
+            ?Area rdfs:subClassOf ?Borough.
+            ?Borough ao:boroughName ?inner_borough_name.
+        } 
+        GROUP BY ?inner_borough_name
+    }
+} 
+GROUP BY ?listingType ?borough_name ?total ?inner_borough_name
+HAVING (?borough_name = ?inner_borough_name)
+ORDER BY ?listingType DESC(?percentage)
