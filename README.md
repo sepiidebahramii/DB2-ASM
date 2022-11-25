@@ -1,7 +1,7 @@
 # DB2-ASM
 
-Group Members:
-Alessandro Benetti 1210974
-Andrea Ceccato 2007727
-Mohammad Muzammil Sohail 2043886
-Sepide Bahrami 2043887
+<b>Group Members: <br></b>
+Alessandro Benetti 1210974 <br>
+Andrea Ceccato 2007727 <br>
+Mohammad Muzammil Sohail 2043886 <br>
+Sepide Bahrami 2043887 <br>
