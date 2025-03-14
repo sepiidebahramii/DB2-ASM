@@ -1,4 +1,5 @@
-# DB2-ASM
+# Master Course: Database 2 - Knowledge Graphs
+RDF Graph and Ontology of the Airbnb dataset<br><br>
 
 <b>Group Members: <br></b>
 Alessandro Benetti 1210974 <br>
